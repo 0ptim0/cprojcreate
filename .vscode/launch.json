@@ -6,7 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/cprojcreate",
-            "args": ["fuck1", "~/optim"],
+            "args": ["empty", "~/optim", "c"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

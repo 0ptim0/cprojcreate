@@ -1,7 +1,16 @@
-static char *main_src = "\
+static char *main_c_src = "\
 #include <stdio.h>\n\
 \n\
-int main (int argc, char **argv) {\n\
+int main(int argc, char **argv) {\n\
+\n\
+}\n\
+";
+
+static char *main_cpp_src = "\
+#include <iostream>\n\
+using namespace std;\n\
+\n\
+int main(int argc, char **argv) {\n\
 \n\
 }\n\
 ";
@@ -11,7 +20,17 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)\n\
 \n\
 set(PROJ_NAME ";
 
-static char *cmake_src_end = ")\n\
+static char *cmake_cpp_src_end = ")\n\
+\n\
+include_directories(./)\n\
+\n\
+file(GLOB SRC\n\
+    \"main.cpp\"\n\
+)\n\
+\n\
+add_executable(${PROJ_NAME} ${SRC})\n";
+
+static char *cmake_c_src_end = ")\n\
 \n\
 include_directories(./)\n\
 \n\
@@ -32,7 +51,7 @@ static char *launch_json_start = "\
             \"program\": \"${workspaceFolder}/build/";
 
 static char *launch_json_end = "\",\n\
-            \"args\": [\"fuck\", \"~/optim\"], // [\"arg1\", \"arg2\"]\n\
+            \"args\": [],\n\
             \"stopAtEntry\": false,\n\
             \"cwd\": \"${workspaceFolder}\",\n\
             \"environment\": [],\n\

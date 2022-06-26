@@ -8,28 +8,39 @@
 
 #include "files.h"
 
-int main (int argc, char **argv){
+int main(int argc, char **argv) {
     FILE *file;
 
     // Args parsing
-    if(argc != 3 ) {
+    if(argc != 4 ) {
         printf("Wrong number of args!\n");
+        printf("cprojcreate [name] [path_to_proj] [type]\n");
         printf("Example:\n");
-        printf("cprojcreate [name] [path_to_proj]\n");
+        printf("cprojcreate empty ~/project cpp\n");
         return -1;
     }
 
     char *name = argv[1];
     char *path = argv[2];
-    char *src = "main.c";
+    char *type = argv[3];
     char *cmake = "CMakeLists.txt";
     char *launch = "launch.json";
 
-    // Get path
-    size_t len = strlen(path);
-    if(path[len - 1] != '/') {
-        strncat(path, "/", 2);
+    // Check type
+    if(!strcmp(type, "c") && !strcmp(type, "cpp")) {
+        printf("Bad type, use c/cpp\n");
+        printf("\n%s\n", type);
+        return -1;
     }
+
+    // Get path
+    char path_proj[32];
+    size_t len = strlen(path);
+    strcpy(path_proj, path);
+    if(path[len - 1] != '/') {
+        strncat(path_proj, "/", 2);
+    }
+    path = path_proj;
 
     strncat(path, name, strlen(name));
 
@@ -68,11 +79,21 @@ int main (int argc, char **argv){
     chdir(path);
     mkdir(".vscode", dir_perm);
 
-    // Generate main.c
-    file = fopen("main.c", "w");
+    // Generate main.c/main.cpp
+    char *main_src;
+    char *cmake_src_end;
+    if(!strcmp(type, "cpp")) {
+        file = fopen("main.cpp", "w");
+        main_src = main_cpp_src;
+        cmake_src_end = cmake_cpp_src_end;
+    } else {
+        file = fopen("main.c", "w");
+        main_src = main_c_src;
+        cmake_src_end = cmake_c_src_end;
+    }
 
     if(file == NULL) {
-        perror("main.c");
+        perror("main");
         return -1;
     }
 
